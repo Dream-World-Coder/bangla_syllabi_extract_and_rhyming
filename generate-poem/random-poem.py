@@ -92,3 +92,6 @@ def generate_random_poem(db_path:str, pattern:str, no_of_lines_per_stanza:int=2,
 
 if __name__ == "__main__":
     generate_random_poem('database/db/words.json', "4|4|4|2")
+
+# semi-automata: give it a m•n+k sequence, it will recognise all chondo-matra-riti etc
+# and then it will construct a new seq with same proerties, and will also match the last syllable of words/lat word to rhyme

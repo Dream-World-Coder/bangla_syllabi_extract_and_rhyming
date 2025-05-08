@@ -1,6 +1,7 @@
 import re
 
 # juktakhor handling - not so proper, sometimes they themselves split & sometimes they stick together, can be optimised
+# chandrabindu, un-sar --
 
 class SplitBanglaSyllables:
     def __init__(self):

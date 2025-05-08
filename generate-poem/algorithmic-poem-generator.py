@@ -49,7 +49,7 @@ class PoemGenerator:
             case 6:
                 return [[6], [2, 4]]
             case 7:
-                return [[7], [2, 5]]
+                return [[7], [2, 5], [3, 4]]
             case 8:
                 return [[8], [2, 6], [4, 4]]
             case _:
@@ -104,7 +104,7 @@ class PoemGenerator:
 
 
 if __name__ == "__main__":
-    pattern = "4|4|4|2"
+    pattern = "7|7|7|2"
     lines_to_generate = 4
     match_last = True
     pg = PoemGenerator(pattern)

@@ -8,7 +8,7 @@
             মাত্রাবৃত্ত,
             অক্ষরবৃত্ত
         },
-        partsOfSpeech
+        # partsOfSpeech : not needed, poems do not follow specific s-v-o order
     }
 '''
 # from ..splitting_syllabi.splitBanglaSyllables import SplitBanglaSyllables
@@ -29,7 +29,9 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
         content = f.read()
 
     # split into syllables
-    syllables = splitter.split_sentence_into_syllables(content)
+    syllables = []
+    for sentence in content.split("\n"):
+        syllables.append(splitter.split_sentence_into_syllables(sentence))
 
     # building word entries
     word_entries = []
@@ -42,7 +44,7 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
                 "মাত্রাবৃত্ত": splitter.get_matra(sylls, "মাত্রাবৃত্ত"),
                 "অক্ষরবৃত্ত": splitter.get_matra(sylls, "অক্ষরবৃত্ত")
             },
-            "partsOfSpeech": splitter.get_parts_of_speech(word)
+            # "partsOfSpeech": splitter.get_parts_of_speech(word)
         }
         word_entries.append(entry)
 

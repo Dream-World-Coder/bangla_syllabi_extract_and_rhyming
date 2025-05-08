@@ -7,18 +7,40 @@
 logic:
 basic + cv-vc-cvc-ccv
 
-db str:
-table/document: 'words'
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    word{
-        exact_word_with_suffix_search
-        length
-        syllabi:[
-            syllable:'name'
-        ]
-    }
+for stanza in range(no_of_stanza):
 
-swaranto/banjonanto --> no need to store can be calculated easily
+<!--  -->
+
+    for lines in range(no_of_lines_per_stanza):
+     <!--  -->
+        for matra in extracted_pattern:
+            print(f'{matra=}')
+            # words_list.find =>
+            # word or words for which
+            # word.totalMatra.[chhondo] = matra
+            # or, SumESum(word.totalMatra.[chhondo]) = matra // in sumesum check: matra > 0 must
+            # now after you find them, store them temporarily because in most of the cases matra will be repeatitive (eg 7n+2, m*n+k)
+            # now:
+                # randomly pic any one word [easiest] -- current implementation
+                # check parts of speech (word.partsOfSpeech) & pick any random based on a grammar^^^
+                # ^^^[-- in poem usually s-v-o is not followed, it can be anything so grammer one will be skipped for now]
+                # check মিল of last word, eg: বনে - মনে
+                # alongside grammar check meaning & correspondance with previous words{something like correlation available here?} also and then pick one [hardest]
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# output: random:
+
+['আইসক্রিম', 'লাফিয়েছিল', 'উইন']
+['কুসুমবাসিত', 'বালিকারা', 'কোদাল']
+
+    কৃতজ্ঞতার নামিয়াছে বিপদ্
+    অনুরোধে দীর্ঘিকার ভাবিল
+
+    চক্রবৃদ্ধি বার্ধক্যরেখা চাচাদেরও অপরিচয়
+    সত্যপুরুষটি ট্রিনিটি পরিকল্পনার দাখো
 
 # Res: ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 

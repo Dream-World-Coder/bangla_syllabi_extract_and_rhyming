@@ -1,5 +1,7 @@
 import re
 
+# juktakhor handling - not so proper, sometimes they themselves split & sometimes they stick together, can be optimised
+
 class SplitBanglaSyllables:
     def __init__(self):
         self.bangla_vowels: set[tuple[str, str]] = {
@@ -22,8 +24,8 @@ class SplitBanglaSyllables:
             "ট", "ঠ", "ড", "ঢ", "ণ",
             "ত", "থ", "দ", "ধ", "ন",
             "প", "ফ", "ব", "ভ", "ম",
-            "য", "র", "ল", "শ", "ষ", "স", "হ",
-            "ড়", "ঢ়", "য়"
+            "য", "র", "ল", "শ", "ষ",
+            "স", "হ", "ড়", "ঢ়", "য়",
         }
 
         self.bangla_vowels_flattened: set[str] = {char for tup in self.bangla_vowels for char in tup}
@@ -82,7 +84,6 @@ class SplitBanglaSyllables:
     def is_swaranto(self, seq: str) -> bool: # মুক্তদল
         """check if the string ends with a vowel (স্বরান্ত)."""
         return (seq and self.is_bangla_vowel(seq[-1])) or False
-        # return bool(seq and self.is_bangla_vowel(seq[-1]))
 
     def is_banjonanto(self, seq: str) -> bool:  # রুদ্ধদল
         """check if the string ends with a consonant (ব্যঞ্জনান্ত)."""
@@ -94,7 +95,7 @@ class SplitBanglaSyllables:
 
     def get_matra(self, generated_syllables, chhondo) -> int:
         """calculate matra of a word"""
-        sum:int = 0
+        sum = 0
         for index, syllable in enumerate(generated_syllables):
             if self.is_swaranto(syllable): # always মাত্রা 1 for মুক্তদল
                 sum += 1
@@ -198,14 +199,16 @@ class SplitBanglaSyllables:
 
         return generated_syllables
 
-    def get_parts_of_speech(self, word:str) -> str:
-        pass
+    # def get_parts_of_speech(self, word:str) -> str:
+    #     bnlp_pos = BengaliPOS()
+    #     print(bnlp_pos.tag(word))
+    #     return ""
 
     def __repr__(self):
         return "<SplitBanglaSyllables> Split Bangla words & sentences into syllables"
 
 
-
+# check matra of অতিশয়" -- exception,
 
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -264,14 +267,47 @@ if __name__ == "__main__":
 
     file = "output.txt"
 
-    with open(file, "w") as f:
-        for word in bangla_words:
-            word, syllables = splitter.split_word_into_syllables(word)
-            f.write(f"{word}: {syllables}\n")
+    # with open(file, "w") as f:
+    #     for word in bangla_words:
+    #         word, syllables = splitter.split_word_into_syllables(word)
+    #         f.write(f"{word}: {syllables}\n")
 
-        f.write("\n\nPOEM\n\n")
-        syllables = splitter.split_sentence_into_syllables(poem)
-        for item in syllables:
-            f.write(f"{item[0]}: {item[1]}\n")
+    #     f.write("\n\nPOEM\n\n")
+    #     syllables = splitter.split_sentence_into_syllables(poem)
+    #     for item in syllables:
+    #         f.write(f"{item[0]}: {item[1]}\n")
+
+    syllables = splitter.split_word_into_syllables("অতিশয়")
+    for chhondo in ["স্বরবৃত্ত", "মাত্রাবৃত্ত", "অক্ষরবৃত্ত"]:
+        print(splitter.get_matra(syllables[1], chhondo))
+
+    print("####")
+    # +++++++++++++++++++++++++++++++++
+    # They are different unicode char
+    # +++++++++++++++++++++++++++++++++
+    ch = 'য়'
+    ch = 'য়'
+    print(f'{splitter.is_swaranto(ch)=} {splitter.is_banjonanto(ch)=}')
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+'''
+syllables=('অতিশয়', ['অ', 'তিশ্', 'য়'])
+syllable='অ'
+syllable='অ' is swaranto
+syllable='তিশ্'
+syllable='তিশ্' is banjonanto
+syllable='য়'
+2
+syllable='অ'
+syllable='অ' is swaranto
+syllable='তিশ্'
+syllable='তিশ্' is banjonanto
+syllable='য়'
+3
+syllable='অ'
+syllable='অ' is swaranto
+syllable='তিশ্'
+syllable='তিশ্' is banjonanto
+syllable='য়'
+2
+'''

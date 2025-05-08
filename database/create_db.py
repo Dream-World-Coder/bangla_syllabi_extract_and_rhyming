@@ -29,9 +29,10 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
         content = f.read()
 
     # split into syllables
-    syllables = []
-    for sentence in content.split("\n"):
-        syllables.append(splitter.split_sentence_into_syllables(sentence))
+    # syllables = []
+    # for sentence in content.split("\n"):
+    #     syllables.append(splitter.split_sentence_into_syllables(sentence))
+    syllables = splitter.split_sentence_into_syllables(content)
 
     # building word entries
     word_entries = []

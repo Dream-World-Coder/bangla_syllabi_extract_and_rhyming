@@ -1,5 +1,4 @@
 import re
-from typing import Dict, List
 from transformers import AutoTokenizer, AutoModelForTokenClassification, pipeline
 from transformers.pipelines import AggregationStrategy, PipelineException
 
@@ -213,15 +212,14 @@ class SplitBanglaSyllables:
 
         return generated_syllables
 
-    def get_parts_of_speech(self, word: str) -> Dict[str, List[str]]:
+    def get_parts_of_speech(self, word: str) -> str:
         """
-        Returns a dict mapping POS tags to the list of tokens (in this case, usually one)
-        for the given Bengali word.
+        Returns the POS tag for the given Bengali word.
 
         :param word: a single Bengali word or short phrase
-        :return: { pos_tag: [token1, token2, ...], ... }
+        :return: pos_tag (e.g. "NN", "VB", etc.)
         :raises ValueError: if input is invalid
-        :raises RuntimeError: for pipeline failures
+        :raises RuntimeError: for pipeline failures or no tag found
         """
         if not isinstance(word, str):
             raise ValueError("`word` must be a string.")
@@ -235,16 +233,14 @@ class SplitBanglaSyllables:
         except Exception as e:
             raise RuntimeError(f"Unexpected error during POS tagging: {e}") from e
 
-        pos_dict: Dict[str, List[str]] = {}
-        for res in results:
-            tag = res.get("entity_group") or res.get("entity")  # fallback in case of key differences
-            token = res.get("word")
-            if not tag or not token:
-                continue
+        if not results:
+            raise RuntimeError(f"No POS tags returned for input '{word}'")
 
-            pos_dict.setdefault(tag, []).append(token)
+        tag = results[0].get("entity_group") or results[0].get("entity")
+        if not tag:
+            raise RuntimeError(f"Unable to determine POS tag for input '{word}'")
 
-        return pos_dict
+        return tag
 
     def __repr__(self):
         return "<SplitBanglaSyllables> Split Bangla words & sentences into syllables"
@@ -304,7 +300,7 @@ if __name__ == "__main__":
 
     splitter:SplitBanglaSyllables = SplitBanglaSyllables()
 
-    file = "database/output.txt"
+    file = "word_to_syllables/output.txt"
 
     with open(file, "w") as f:
         for word in bangla_words:
@@ -314,12 +310,11 @@ if __name__ == "__main__":
         f.write("\n\nPOEM\n\n")
         syllables = splitter.split_sentence_into_syllables(poem)
         for item in syllables:
-            # f.write(f"{item[0]}: {item[1]}\n")
-            f.write(f"{item[0]=} {splitter.get_parts_of_speech(item[0])=}")
+            f.write(f"{item[0]}: {item[1]}\n")
 
-    syllables = splitter.split_word_into_syllables("অতিশয়")
-    for chhondo in ["স্বরবৃত্ত", "মাত্রাবৃত্ত", "অক্ষরবৃত্ত"]:
-        print(splitter.get_matra(syllables[1], chhondo))
+    # syllables = splitter.split_word_into_syllables("অতিশয়")
+    # for chhondo in ["স্বরবৃত্ত", "মাত্রাবৃত্ত", "অক্ষরবৃত্ত"]:
+    #     print(splitter.get_matra(syllables[1], chhondo))
 
     print("####")
     # +++++++++++++++++++++++++++++++++
@@ -327,7 +322,7 @@ if __name__ == "__main__":
     # +++++++++++++++++++++++++++++++++
     ch = 'য়'
     ch = 'য়'
-    print(f'{splitter.is_swaranto(ch)=} {splitter.is_banjonanto(ch)=}')
+    # print(f'{splitter.is_swaranto(ch)=} {splitter.is_banjonanto(ch)=}')
 
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # issues:

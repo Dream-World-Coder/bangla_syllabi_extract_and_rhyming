@@ -8,7 +8,7 @@
             মাত্রাবৃত্ত,
             অক্ষরবৃত্ত
         },
-        # partsOfSpeech : not needed, poems do not follow specific s-v-o order
+        POS : , poems do not follow specific s-v-o order
     }
 '''
 
@@ -46,7 +46,7 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
                 "মাত্রাবৃত্ত": splitter.get_matra(sylls, "মাত্রাবৃত্ত"),
                 "অক্ষরবৃত্ত": splitter.get_matra(sylls, "অক্ষরবৃত্ত")
             },
-            "partsOfSpeech": splitter.get_parts_of_speech(word)
+            "POS": splitter.get_parts_of_speech(word)
         }
         word_entries.append(entry)
 

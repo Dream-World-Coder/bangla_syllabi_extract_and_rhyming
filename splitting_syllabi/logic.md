@@ -2,7 +2,7 @@
 
 # x in y
 
-# find the hEN const
+# find the hEN const, how many randoms create 1 meaning ful -- p&c qn
 
 logic:
 basic + cv-vc-cvc-ccv

@@ -79,14 +79,18 @@ class SplitBanglaSyllables:
 
         return result
 
-    def is_swaranto(self, cd: str) -> bool: # মুক্তদল
+    def is_swaranto(self, seq: str) -> bool: # মুক্তদল
         """check if the string ends with a vowel (স্বরান্ত)."""
-        return (cd and self.is_bangla_vowel(cd[-1])) or False
-        # return bool(cd and self.is_bangla_vowel(cd[-1]))
+        return (seq and self.is_bangla_vowel(seq[-1])) or False
+        # return bool(seq and self.is_bangla_vowel(seq[-1]))
 
-    def is_banjonanto(self, cd: str) -> bool: # রুদ্ধদল
+    def is_banjonanto(self, seq: str) -> bool:  # রুদ্ধদল
         """check if the string ends with a consonant (ব্যঞ্জনান্ত)."""
-        return (cd and self.is_bangla_consonant(cd[-1])) or False
+        if not seq:
+            return False
+        if seq[-1] == "\u09CD":  # hosonto (্)
+            return True
+        return self.is_bangla_consonant(seq[-1])
 
     def get_matra(self, generated_syllables, chhondo) -> int:
         """calculate matra of a word"""

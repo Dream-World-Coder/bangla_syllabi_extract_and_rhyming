@@ -44,18 +44,24 @@ class PoemGenerator:
                 return [[m]]
             case 4:
                 return [[4], [2, 2]]
+                # ---
             case 5:
-                return [[5], [2, 3]]
+                return [[5], [2, 3], [1, 4]]
             case 6:
-                return [[6], [2, 4]]
+                return [[2, 4], [3, 3]]
             case 7:
-                return [[7], [2, 5], [3, 4]]
+                return [[2, 5], [3, 4]]
+                # ---
             case 8:
-                return [[8], [2, 6], [4, 4]]
+                return [[5, 3], [2, 6], [4, 4]]
+            case 9:
+                return [[3, 6], [4, 5]]
+            case 10:
+                return [[3,4,3], [4, 6], [5, 5]]
             case _:
                 return [[m]]
 
-    def generate_random_poem(self, lines_to_generate: int = 2, match_last: bool = False) -> List[str]:
+    def generate_random_poem(self, lines_to_generate: int = 2, match_last: bool = True) -> List[str]:
         chhondo, extracted_pattern = self.determine_chhondo(self.pattern)
         if not isinstance(lines_to_generate, int):
             raise Exception("Invalid input: stanza count and lines per stanza must be integers")
@@ -102,6 +108,12 @@ class PoemGenerator:
             last_word_of_prev_line = line_words[-1]
         return poem
 
+    def generate_next_line(self, first_line:str):
+        pass
+
+    def generate_poem_with_grammar(self, lines_to_generate: int = 2):
+        # creating matching - matching poem, with bit meaning, a/c to self.pattern
+        pass
 
 if __name__ == "__main__":
     pattern = "7|7|7|2"

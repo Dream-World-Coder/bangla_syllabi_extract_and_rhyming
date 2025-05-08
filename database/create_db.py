@@ -17,7 +17,7 @@ import json
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from splitting_syllables.splitBanglaSyllables import SplitBanglaSyllables
+from word_to_syllables.splitBanglaSyllables import SplitBanglaSyllables
 
 def create_word_database(read_file="passage.txt", write_file="db/words.json"):
     read_file = os.path.join(os.getcwd(), f'database/{read_file}')
@@ -46,7 +46,7 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
                 "মাত্রাবৃত্ত": splitter.get_matra(sylls, "মাত্রাবৃত্ত"),
                 "অক্ষরবৃত্ত": splitter.get_matra(sylls, "অক্ষরবৃত্ত")
             },
-            # "partsOfSpeech": splitter.get_parts_of_speech(word)
+            "partsOfSpeech": splitter.get_parts_of_speech(word)
         }
         word_entries.append(entry)
 

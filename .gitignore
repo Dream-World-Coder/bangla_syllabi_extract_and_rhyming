@@ -3,4 +3,4 @@
 *.un~
 tests/
 __py*
-database/db/*
+database/db/words.txt

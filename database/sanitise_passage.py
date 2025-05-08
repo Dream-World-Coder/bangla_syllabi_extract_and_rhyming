@@ -5,6 +5,7 @@ def clean_and_rewrite_file(filename: str):
     with open(filename, "r", encoding="utf-8") as file:
         text = file.read()
 
+    # also remove these: ৷ - = ’ ” ‚
     # Remove English letters, English digits, Bangla digits, and symbols
     cleaned_text = re.sub(r'[a-zA-Z0-9০-৯]', '', text)  # Remove English letters, digits, and Bangla digits
     cleaned_text = re.sub(r'[^\u0980-\u09FF\s]', '', cleaned_text)  # Remove non-Bangla characters except space

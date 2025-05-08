@@ -198,6 +198,9 @@ class SplitBanglaSyllables:
 
         return generated_syllables
 
+    def get_parts_of_speech(self, word:str) -> str:
+        pass
+
     def __repr__(self):
         return "<SplitBanglaSyllables> Split Bangla words & sentences into syllables"
 

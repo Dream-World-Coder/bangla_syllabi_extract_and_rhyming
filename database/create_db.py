@@ -42,7 +42,7 @@ def create_word_database(read_file="passage.txt", write_file="db/words.json"):
                 "মাত্রাবৃত্ত": splitter.get_matra(sylls, "মাত্রাবৃত্ত"),
                 "অক্ষরবৃত্ত": splitter.get_matra(sylls, "অক্ষরবৃত্ত")
             },
-            "partsOfSpeech": None
+            "partsOfSpeech": splitter.get_parts_of_speech(word)
         }
         word_entries.append(entry)
 

@@ -16,7 +16,7 @@ import json
 import os
 import sys
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from splitting_syllabi.splitBanglaSyllables import SplitBanglaSyllables
+from splitting_syllables.splitBanglaSyllables import SplitBanglaSyllables
 
 def create_word_database(read_file="passage.txt", write_file="db/words.json"):
     read_file = os.path.join(os.getcwd(), f'database/{read_file}')

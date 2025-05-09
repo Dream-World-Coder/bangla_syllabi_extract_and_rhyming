@@ -108,26 +108,76 @@ class PoemGenerator:
             last_word_of_prev_line = line_words[-1]
         return poem
 
-    def generate_next_line(self, first_line:str):
-        pass
+    def generate_poem_with_grammar(self):
+        # lines_to_generate: int = 2, not to be as param
+        # first check the self.pattern,
+        # chhondo, extracted_pattern = self.determine_chhondo(self.pattern)
+        # the sentence will have len(extracted_pattern) words [for now, later i will wrap a sentence in 2-4 lines, for more poetic feel]
+        # so make the sentence with the grammar,
+        # eg final sentence = <NOUN> <NOUN> <VERB> <ADJ> <NOUN>
+        # now we know the matra and chhondo, but as we also have access to POS now, we will look por word.POS and match the resultant sentence
+        # this is the only difference from generate_random_poem, that is consideration of the word.POS alongside word.totalMatra.chhondo
+        # NOW MAKE IT, CAREFULLY OBSERVE THE generate_random_poem
 
-    def generate_poem_with_grammar(self, lines_to_generate: int = 2):
-        # creating matching - matching poem, with bit meaning, a/c to self.pattern
-        pass
+        # ——————————————————————
+        # 1) determine chhondo & pattern
+        chhondo, extracted_pattern = self.determine_chhondo(self.pattern)
+        L = len(extracted_pattern)
+
+        # 2) define a tiny POS-sequence grammar for child-poem feel
+        grammar_rules: Dict[int, List[str]] = {
+            2: ["NOUN", "VERB"],
+            3: ["NOUN", "ADJ", "NOUN"],
+            4: ["ADJ", "NOUN", "VERB", "ADJ"],
+            5: ["NOUN", "NOUN", "VERB", "ADJ", "NOUN"],
+            # extend as needed...
+        }
+        if L not in grammar_rules:
+            raise Exception(f"No grammar rule for sentence length {L}")
+
+        pos_sequence = grammar_rules[L]
+
+        # 3) load word database
+        with open(self.database_path, 'r') as f:
+            data = json.load(f)
+        words_list = data.get("words") or []
+        if not words_list:
+            raise Exception("Unable to retrieve json words data")
+
+        # 4) pick one word per slot
+        used = set()
+        sentence_tokens: List[str] = []
+
+        for idx, matra in enumerate(extracted_pattern):
+            desired_pos = pos_sequence[idx]
+            # matra-filtered
+            candidates = self.find_valid_words(words_list, chhondo, matra)
+            # POS-filtered
+            pos_candidates = [w for w in candidates if w.get("pos") == desired_pos]
+            pool = pos_candidates or candidates  # fallback if no POS match
+            # avoid repetition
+            fresh = [w for w in pool if w["word"] not in used] or pool
+            if not fresh:
+                raise Exception(f"No words for matra={matra}, POS={desired_pos}")
+            choice = random.choice(fresh)
+            used.add(choice["word"])
+            sentence_tokens.append(choice["word"])
+
+        # 5) return the joined sentence
+        return " ".join(sentence_tokens)
 
 if __name__ == "__main__":
     pattern = "7|7|7|2"
     lines_to_generate = 4
     match_last = True
     pg = PoemGenerator(pattern)
-    poem = pg.generate_random_poem(lines_to_generate, match_last)
+    poem = pg.generate_poem_with_grammar()
     out_dir = os.path.join(os.getcwd(), 'generate-poem')
     os.makedirs(out_dir, exist_ok=True)
-    op_file = os.path.join(out_dir, 'poem-op.txt')
+    op_file = os.path.join(out_dir, 'output.txt')
     with open(op_file, 'a', encoding='utf-8') as f:
-        f.write(f"\n{pattern}\n----------\n")
-        for line in poem:
-            f.write(f"{line}\n")
+        f.write(f"\n{pattern} WITH GRAMMAR\n----------\n")
+        f.write(f"{"".join(poem)}\n")
         f.write('\n')
 
 

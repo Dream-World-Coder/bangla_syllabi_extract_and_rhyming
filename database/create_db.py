@@ -8,7 +8,7 @@
             মাত্রাবৃত্ত,
             অক্ষরবৃত্ত
         },
-        POS : , poems do not follow specific s-v-o order
+        POS
     }
 '''
 

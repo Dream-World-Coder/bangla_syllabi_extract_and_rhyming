@@ -1,0 +1,67 @@
+| Tag       | Description                              | Example(s)                                |
+| --------- | ---------------------------------------- | ----------------------------------------- |
+| **NN**    | Noun, singular or mass                   | “dog”, “happiness”                        |
+| **NNS**   | Noun, plural                             | “dogs”, “ideas”                           |
+| **NNP**   | Proper noun, singular                    | “London”, “Alice”                         |
+| **NNPS**  | Proper noun, plural                      | “Smiths”, “Rockies”                       |
+| **CD**    | Cardinal number                          | “one”, “2025”                             |
+| **JJ**    | Adjective                                | “big”, “happy”                            |
+| **JJR**   | Adjective, comparative                   | “bigger”, “happier”                       |
+| **JJS**   | Adjective, superlative                   | “biggest”, “happiest”                     |
+| **PRP**   | Personal pronoun                         | “I”, “you”, “they”                        |
+| **PRP\$** | Possessive pronoun                       | “my”, “your”, “their”                     |
+| **VBD**   | Verb, past tense                         | “ran”, “ate”                              |
+| **VBG**   | Verb, gerund or present participle       | “running”, “eating”                       |
+| **VBN**   | Verb, past participle                    | “run”, “eaten”                            |
+| **VBP**   | Verb, non-3rd person singular present    | “run”, “eat”                              |
+| **VBZ**   | Verb, 3rd person singular present        | “runs”, “eats”                            |
+| **VB**    | Verb, base form                          | “run”, “eat”                              |
+| **RB**    | Adverb                                   | “quickly”, “very”                         |
+| **RBR**   | Adverb, comparative                      | “more slowly”                             |
+| **RBS**   | Adverb, superlative                      | “most quickly”                            |
+| **IN**    | Preposition or subordinating conjunction | “in”, “of”, “because”                     |
+| **DT**    | Determiner                               | “the”, “a”, “these”                       |
+| **CC**    | Coordinating conjunction                 | “and”, “but”, “or”                        |
+| **MD**    | Modal auxiliary                          | “can”, “should”                           |
+| **UH**    | Interjection                             | “oh”, “wow”                               |
+| **EX**    | Existential “there”                      | “there” (in “there is”)                   |
+| **FW**    | Foreign word                             | “bonjour”, “adiós”                        |
+| **POS**   | Possessive ending                        | “’s”                                      |
+| **SYM**   | Symbol                                   | “\$”, “%”, “&”                            |
+| **TO**    | “to” (infinitival “to”)                  | “to” in “to go”                           |
+| **WDT**   | Wh-determiner                            | “which”, “that”                           |
+| **WP**    | Wh-pronoun                               | “who”, “what”                             |
+| **WRB**   | Wh-adverb                                | “where”, “when”                           |
+| **XX**    | Unknown or other — token not in set      | e.g. weird symbols or unrecognized tokens |
+
+
+<Poem>       ::= <CoupletA> <CoupletB>
+
+<CoupletA>   ::= <LineA1> <LineA2>    # A-rhyme couplet
+<CoupletB>   ::= <LineB1> <LineB2>    # B-rhyme couplet
+
+<LineA1>     ::= <NP> <VP> <RhymeA>
+<LineA2>     ::= <NP> <VP> <RhymeA>
+<LineB1>     ::= <NP> <VP> <RhymeB>
+<LineB2>     ::= <NP> <VP> <RhymeB>
+
+# Phrase structure using Penn tags:
+<NP>         ::= <PRON>
+               | <DT> <NOUN>
+               | <ADJ> <NOUN>
+
+<VP>         ::= <VERB>
+               | <VERB> <NP>
+               | <VERB> <ADV>
+
+# Rhyme slots—same tag structure in each couplet
+<RhymeA>     ::= <NOUN> | <ADJ>
+<RhymeB>     ::= <NOUN> | <ADJ>
+
+# Terminal POS → actual words
+<PRON>       ::= “আমি” | “তুমি” | “সে” | …
+<DT>         ::= “একটি” | “এই” | “সেই” | …
+<NOUN>       ::= [any NN, NNS, NNP token]
+<ADJ>        ::= [any JJ, JJR token]
+<VERB>       ::= [any VB, VBD, VBP token]
+<ADV>        ::= [any RB token]

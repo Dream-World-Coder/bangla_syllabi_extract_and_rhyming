@@ -41,7 +41,7 @@ def get_poem_text(soup):
     return "\n".join(lines).strip()
 
 
-# 1) load main page, grab poets
+# load main page, grab poets
 main_soup = make_soup(BASE_URL)
 poets = []
 for a in main_soup.select('ul.item-list li[itemtype="https://schema.org/Person"] a'):
@@ -49,7 +49,7 @@ for a in main_soup.select('ul.item-list li[itemtype="https://schema.org/Person"]
     url = href if href.startswith("http") else BASE_URL + href
     poets.append((a.get_text(strip=True), url))
 
-# 2) for each poet, fetch their poem list
+# for each poet, fetch their poem list
 with open(OUTPUT_FILE, "a", encoding="utf-8") as fout:
     for poet_name, poet_url in poets:
         print(f"Scraping {poet_name}")

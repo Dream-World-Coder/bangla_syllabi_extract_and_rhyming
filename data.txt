@@ -46,13 +46,9 @@
 <LineB2>     ::= <NP> <VP> <RhymeB>
 
 # Phrase structure using Penn tags:
-<NP>         ::= <PRON>
-               | <DT> <NOUN>
-               | <ADJ> <NOUN>
+<NP>         ::= <PRON>| <DT> <NOUN>| <ADJ> <NOUN>
 
-<VP>         ::= <VERB>
-               | <VERB> <NP>
-               | <VERB> <ADV>
+<VP>         ::= <VERB>| <VERB> <NP>| <VERB> <ADV>
 
 # Rhyme slots—same tag structure in each couplet
 <RhymeA>     ::= <NOUN> | <ADJ>
@@ -65,3 +61,14 @@
 <ADJ>        ::= [any JJ, JJR token]
 <VERB>       ::= [any VB, VBD, VBP token]
 <ADV>        ::= [any RB token]
+
+
+# lines_to_generate: int = 2, not to be as param
+# first check the self.pattern,
+# chhondo, extracted_pattern = self.determine_chhondo(self.pattern)
+# the sentence will have len(extracted_pattern) words [for now, later i will wrap a sentence in 2-4 lines, for more poetic feel]
+# so make the sentence with the grammar,
+# eg final sentence = <NOUN> <NOUN> <VERB> <ADJ> <NOUN>
+# now we know the matra and chhondo, but as we also have access to POS now, we will look por word.POS and match the resultant sentence
+# this is the only difference from generate_random_poem, that is consideration of the word.POS alongside word.totalMatra.chhondo
+# NOW MAKE IT, CAREFULLY OBSERVE THE generate_random_poem

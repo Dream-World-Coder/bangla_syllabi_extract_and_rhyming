@@ -108,7 +108,7 @@ class PoemGenerator:
             last_word_of_prev_line = line_words[-1]
         return poem
 
-    # --------
+    # ---- #
     def load_words(self) -> List[Dict[str,Any]]:
         with open(self.database_path) as f:
             data = json.load(f)
@@ -124,7 +124,7 @@ class PoemGenerator:
             return pos_cand or cand
         return cand
 
-    def generate_poem_with_grammar1(self):
+    def generate_poem_with_grammar1(self, lines_to_generate: int = 2):
         # lines_to_generate: int = 2, not to be as param
         # first check the self.pattern,
         # chhondo, extracted_pattern = self.determine_chhondo(self.pattern)
@@ -163,25 +163,26 @@ class PoemGenerator:
         used = set()
         sentence_tokens: List[str] = []
 
-        for idx, matra in enumerate(extracted_pattern):
-            desired_pos = pos_sequence[idx]
-            # matra-filtered
-            candidates = self.find_valid_words(words_list, chhondo, matra)
-            # POS-filtered
-            pos_candidates = [w for w in candidates if w.get("pos") == desired_pos]
-            pool = pos_candidates or candidates  # fallback if no POS match
-            # avoid repetition
-            fresh = [w for w in pool if w["word"] not in used] or pool
-            if not fresh:
-                raise Exception(f"No words for matra={matra}, POS={desired_pos}")
-            choice = random.choice(fresh)
-            used.add(choice["word"])
-            sentence_tokens.append(choice["word"])
+        for _ in range(lines_to_generate):
+            for idx, matra in enumerate(extracted_pattern):
+                desired_pos = pos_sequence[idx]
+                # matra-filtered
+                candidates = self.find_valid_words(words_list, chhondo, matra)
+                # POS-filtered
+                pos_candidates = [w for w in candidates if w.get("pos") == desired_pos]
+                pool = pos_candidates or candidates  # fallback if no POS match
+                # avoid repetition
+                fresh = [w for w in pool if w["word"] not in used] or pool
+                if not fresh:
+                    raise Exception(f"No words for matra={matra}, POS={desired_pos}")
+                choice = random.choice(fresh)
+                used.add(choice["word"])
+                sentence_tokens.append(choice["word"])
 
         # 5) return the joined sentence
         return " ".join(sentence_tokens)
 
-    def generate_poem_with_grammar2(self) -> List[str]:
+    def generate_poem_with_grammar2(self, lines_to_generate: int = 2) -> List[str]:
         # Build a 4-line poem with AABB rhyme scheme
         ch, pattern = self.determine_chhondo(self.pattern)
         words = self.load_words()
@@ -249,17 +250,34 @@ class PoemGenerator:
         line4 = enforce_rhyme(line3, line4, 'ADJ')
 
         return [line1, line2, line3, line4]
+    # ---- #
 
 if __name__ == "__main__":
     pattern = "4|4|4|2"
-    lines_to_generate = 4
+    lines_to_generate = 2
     match_last = True
     pg = PoemGenerator(pattern)
-    poem = pg.generate_random_poem()
-
     out_dir = os.path.join(os.getcwd(), 'generate-poem')
-    op_file = os.path.join(out_dir, 'poem-op.txt')
 
+
+    op_file = os.path.join(out_dir, 'poem-op.txt')
+    poem = pg.generate_random_poem(lines_to_generate, match_last)
+    with open(op_file, 'a', encoding='utf-8') as f:
+        f.write(f"\n{pattern} \n----------\n")
+        for line in poem:
+            f.write(f"{"".join(line)}\n")
+        f.write('\n')
+
+
+    # ---- with grammar
+    op_file = os.path.join(out_dir, 'output.txt')
+
+    with open(op_file, 'a', encoding='utf-8') as f:
+        f.write(f"\n{pattern} \n----------\n")
+        f.write(f"{"".join(pg.generate_poem_with_grammar1())}\n")
+        f.write('\n')
+
+    poem = pg.generate_poem_with_grammar2()
     with open(op_file, 'a', encoding='utf-8') as f:
         f.write(f"\n{pattern} \n----------\n")
         for line in poem:
